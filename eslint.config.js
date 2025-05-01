@@ -16,4 +16,23 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+
+  {
+    files: ["**/*.{jsx,tsx}"],
+    plugins: {
+      react: pluginReact,
+    },
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        jsxPragma: null,
+      },
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+    },
+  },
 ]);
