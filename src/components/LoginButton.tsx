@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 
 const LoginButton = () => {
   const handleLogin = () => {
-    window.location.href = "https://localhost:8080/api/login";
+    window.location.href = "http://localhost:9090/api/login";
   };
 
   return (
