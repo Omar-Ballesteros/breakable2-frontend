@@ -1,4 +1,4 @@
-import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import axios from "axios";
@@ -14,7 +14,7 @@ const CallbackPage = () => {
     const code = queryParams.get("code");
 
     if (!code) {
-      redirect("/");
+      navigate("/");
       return;
     }
 
@@ -28,10 +28,16 @@ const CallbackPage = () => {
           }
         );
 
-        const { userId } = response.data;
+        console.log("Auth response:", response.data);
+        const { userId, accessToken, expiresIn } = response.data;
 
-        login(userId);
-        navigate("/dashboard", { replace: true });
+        if (userId && accessToken && expiresIn) {
+          login(userId, accessToken, expiresIn);
+          navigate("/dashboard", { replace: true });
+        } else {
+          console.error("Missing required auth fields");
+          navigate("/");
+        }
       } catch (error) {
         console.error("Authentication failed", error);
         navigate("/");
