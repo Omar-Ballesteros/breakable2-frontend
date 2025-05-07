@@ -2,69 +2,79 @@ import {
   Box,
   Button,
   CircularProgress,
-  Container,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
   Typography,
 } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import { useTopArtists } from "../components/hooks/useSpotify";
+import ArtistGrid from "../components/ArtistGrid";
 
-const Dashboard = () => {
-  const [searchParams] = useSearchParams();
-  const userId = searchParams.get("userId");
-  const { login, logout, userId: storedUserId } = useAuth();
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (userId) {
-      login(userId);
-    }
-    setLoading(false);
-  }, [userId, login, storedUserId]);
-
-  if (loading) {
-    return (
-      <Container
-        sx={{
-          mt: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress />
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Loading your Dashboard...
-        </Typography>
-      </Container>
-    );
-  }
-
-  if (!storedUserId) {
-    return (
-      <Container sx={{ mt: 4 }}>
-        <Typography variant="h6" color="error">
-          No se encontró un ID de usuario en la URL.
-        </Typography>
-      </Container>
-    );
-  }
+const Dashboard: React.FC = () => {
+  const { topArtists, loading } = useTopArtists();
 
   return (
-    <Box p={4}>
-      <Typography variant="h3" gutterBottom>
-        Welcome to your Main Dashboard
-      </Typography>
-      <Typography>Your user Id: {storedUserId}</Typography>
-      <Button
-        onClick={logout}
-        variant="contained"
-        color="secondary"
-        sx={{ mt: 2 }}
-      >
-        Logout
-      </Button>
+    <Box sx={{ p: 2, maxWidth: "1200px", margin: "0 auto" }}>
+      {/* Search Section */}
+      <Box sx={{ display: "flex", gap: 2, mb: 4, alignItems: "stretch" }}>
+        <TextField
+          fullWidth
+          placeholder="Search for..."
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel id="search-type-label">Type</InputLabel>
+          <Select labelId="search-type-label" id="search-type" label="Type">
+            <MenuItem value="Artist">Artist</MenuItem>
+            <MenuItem value="Album">Album</MenuItem>
+            <MenuItem value="Song">Song</MenuItem>
+          </Select>
+        </FormControl>
+        <Button
+          variant="contained"
+          sx={{
+            bgcolor: "grey.300",
+            color: "text.primary",
+            "&:hover": {
+              bgcolor: "grey.400",
+            },
+            px: 3,
+          }}
+        >
+          SEARCH
+        </Button>
+      </Box>
+
+      {/* Loading Spinner */}
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          {/* Top Artists Section */}
+          <Box sx={{ mb: 6 }}>
+            <Typography
+              variant="h5"
+              component="h2"
+              sx={{ fontWeight: "bold", mb: 2 }}
+            >
+              MY TOP ARTISTS
+            </Typography>
+            <ArtistGrid artists={topArtists} />
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
