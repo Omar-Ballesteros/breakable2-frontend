@@ -7,20 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Artist } from "../types/spotify";
+import { Track } from "../types/spotify";
 
 interface Props {
-  artists: Artist[];
+  tracks: Track[];
 }
 
-const ArtistGrid: React.FC<Props> = ({ artists }) => (
+const TrackGrid: React.FC<Props> = ({ tracks }) => (
   <Grid container spacing={2}>
-    {artists.map((artists) => (
-      <Grid size={2} key={artists.id}>
+    {tracks.map((track) => (
+      <Grid size={2} key={track.id}>
         <Card
           elevation={0}
           sx={{ bgcolor: "transparent", cursor: "pointer" }}
-          onClick={() => console.log("Clicked artist", artists.id)}
+          onClick={() => console.log("Clicked tracks", track.id)}
         >
           <CardMedia
             component="div"
@@ -34,10 +34,10 @@ const ArtistGrid: React.FC<Props> = ({ artists }) => (
               position: "relative",
             }}
           >
-            {artists.images.length > 0 ? (
+            {track.album.images.length > 0 ? (
               <img
-                src={artists.images[0].url}
-                alt={artists.name}
+                src={track.album.images[0].url}
+                alt={track.name}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -72,13 +72,10 @@ const ArtistGrid: React.FC<Props> = ({ artists }) => (
               component="div"
               sx={{ fontWeight: "medium" }}
             >
-              {artists.name}
+              {track.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {artists.genres
-                .slice(0, 3)
-                .map((genre) => genre.charAt(0).toUpperCase() + genre.slice(1))
-                .join(", ")}
+              {track.artists.map((a) => a.name).join(", ")}
             </Typography>
           </CardContent>
         </Card>
@@ -87,4 +84,4 @@ const ArtistGrid: React.FC<Props> = ({ artists }) => (
   </Grid>
 );
 
-export default ArtistGrid;
+export default TrackGrid;
