@@ -1,5 +1,11 @@
 import axios from "axios";
-import { Artist, SpotifyTopArtistResponse } from "../../types/spotify";
+import {
+  Album,
+  Artist,
+  Track,
+  SpotifySearchResponse,
+  SpotifyTopArtistResponse,
+} from "../types/spotify";
 import { useEffect, useState } from "react";
 
 export function useTopArtists() {
@@ -32,4 +38,22 @@ export function useTopArtists() {
     fetchTopArtists();
   }, []);
   return { topArtists, loading };
+}
+
+export async function searchSpotify(
+  query: string,
+  type: "artist" | "album" | "track"
+): Promise<Artist[] | Album[] | Track[]> {
+  const userId = localStorage.getItem("userId");
+  const response = await axios.get<SpotifySearchResponse>(
+    "http://localhost:9090/api/search",
+    {
+      params: { query, type: type, userId },
+      withCredentials: true,
+    }
+  );
+
+  if (type === "artist") return response.data.artists.items;
+  if (type === "album") return response.data.albums.items;
+  return response.data.tracks.items;
 }

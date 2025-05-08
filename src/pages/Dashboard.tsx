@@ -1,60 +1,72 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import { useTopArtists } from "../components/hooks/useSpotify";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { searchSpotify, useTopArtists } from "../hooks/useSpotify";
 import ArtistGrid from "../components/ArtistGrid";
+import { useState } from "react";
+import { Album, Artist, Track } from "../types/spotify";
+import AlbumGrid from "../components/AlbumGrid";
+import TrackGrid from "../components/TrackGrid";
+import SearchBar from "../components/SearchBar";
+
+type SearchType = "artist" | "album" | "track";
+
+type SearchResultsState =
+  | { type: "artist"; data: Artist[] }
+  | { type: "album"; data: Album[] }
+  | { type: "track"; data: Track[] }
+  | null;
 
 const Dashboard: React.FC = () => {
   const { topArtists, loading } = useTopArtists();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedType, setSelectedType] = useState<SearchType>("artist");
+  const [searchResults, setSearchResults] = useState<SearchResultsState>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+
+    try {
+      const results = await searchSpotify(searchQuery, selectedType);
+      if (selectedType === "artist") {
+        setSearchResults({ type: "artist", data: results as Artist[] });
+      } else if (selectedType === "album") {
+        setSearchResults({ type: "album", data: results as Album[] });
+      } else if (selectedType === "track") {
+        setSearchResults({ type: "track", data: results as Track[] });
+      }
+      setHasSearched(true);
+    } catch (error) {
+      console.error("Search failed:", error);
+    }
+  };
+
+  const renderSearchResults = () => {
+    if (!searchResults || searchResults.data.length === 0) {
+      return <Typography>No results found</Typography>;
+    }
+
+    switch (searchResults.type) {
+      case "artist":
+        return <ArtistGrid artists={searchResults.data} />;
+      case "album":
+        return <AlbumGrid albums={searchResults.data} />;
+      case "track":
+        return <TrackGrid tracks={searchResults.data} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Box sx={{ p: 2, maxWidth: "1200px", margin: "0 auto" }}>
       {/* Search Section */}
-      <Box sx={{ display: "flex", gap: 2, mb: 4, alignItems: "stretch" }}>
-        <TextField
-          fullWidth
-          placeholder="Search for..."
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel id="search-type-label">Type</InputLabel>
-          <Select labelId="search-type-label" id="search-type" label="Type">
-            <MenuItem value="Artist">Artist</MenuItem>
-            <MenuItem value="Album">Album</MenuItem>
-            <MenuItem value="Song">Song</MenuItem>
-          </Select>
-        </FormControl>
-        <Button
-          variant="contained"
-          sx={{
-            bgcolor: "grey.300",
-            color: "text.primary",
-            "&:hover": {
-              bgcolor: "grey.400",
-            },
-            px: 3,
-          }}
-        >
-          SEARCH
-        </Button>
-      </Box>
-
+      <SearchBar
+        query={searchQuery}
+        onQueryChange={setSearchQuery}
+        searchType={selectedType}
+        onSearchTypeChange={setSelectedType}
+        onSearch={handleSearch}
+      />
       {/* Loading Spinner */}
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
@@ -73,6 +85,15 @@ const Dashboard: React.FC = () => {
             </Typography>
             <ArtistGrid artists={topArtists} />
           </Box>
+
+          {hasSearched && (
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+                SEARCH RESULTS
+              </Typography>
+              {renderSearchResults()}
+            </Box>
+          )}
         </>
       )}
     </Box>
