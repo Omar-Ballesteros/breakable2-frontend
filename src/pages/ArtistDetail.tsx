@@ -4,29 +4,11 @@ import {
   useArtistDetails,
   useArtistTopTracks,
 } from "../hooks/useSpotify";
-import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  Chip,
-  IconButton,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
+import { Box, Typography, Chip, TableContainer, Paper } from "@mui/material";
 import AlbumsGrid from "../components/AlbumGrid";
-
-function millisToMinutes(millis: number) {
-  const minutes = Math.floor(millis / 60000);
-  const seconds = Math.floor((millis % 60000) / 1000);
-  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-}
+import TrackTable from "../components/trackTable";
+import BackButton from "../components/BackButton";
+import Loading from "../components/Loading";
 
 const ArtistDetails = () => {
   const { id } = useParams();
@@ -34,9 +16,7 @@ const ArtistDetails = () => {
   const { tracks, loading: loadingTracks } = useArtistTopTracks(id || "");
   const { albums, loading: loadingAlbums } = useArtistAlbums(id || "");
 
-  const navigate = useNavigate();
-
-  if (loading) return <CircularProgress />;
+  if (loading || loadingTracks || loadingAlbums) return <Loading />;
   if (!artist) return <Typography>No artist found</Typography>;
 
   return (
@@ -87,23 +67,7 @@ const ArtistDetails = () => {
         </Box>
 
         {/* Back Button */}
-        <IconButton
-          aria-label="back"
-          onClick={() => navigate(-1)}
-          sx={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bgcolor: "grey.200",
-            "&:hover": {
-              bgcolor: "grey.300",
-            },
-            width: 48,
-            height: 48,
-          }}
-        >
-          <ArrowBack />
-        </IconButton>
+        <BackButton />
       </Box>
 
       {/* Popular Songs */}
@@ -116,60 +80,17 @@ const ArtistDetails = () => {
           Popular Songs
         </Typography>
         {loadingTracks ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            minHeight={200}
-          >
-            <CircularProgress />
-          </Box>
+          <Loading />
         ) : (
           <TableContainer component={Paper} variant="outlined">
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>#</TableCell>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Song Name</TableCell>
-                  <TableCell>Popularity</TableCell>
-                  <TableCell>Song Length</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tracks.map((track, index) => (
-                  <TableRow key={track.id}>
-                    <TableCell sx={{ py: 0.5 }}>{index + 1}</TableCell>
-                    <TableCell sx={{ py: 0.5 }}>
-                      <img
-                        src={track.album.images[0]?.url}
-                        alt={track.name}
-                        style={{ width: 50, height: 50 }}
-                      />
-                    </TableCell>
-                    <TableCell sx={{ py: 0.5 }}>{track.name}</TableCell>
-                    <TableCell sx={{ py: 0.5 }}>{track.popularity}</TableCell>
-                    <TableCell sx={{ py: 0.5 }}>
-                      {millisToMinutes(track.duration_ms)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <TrackTable tracks={tracks} />
           </TableContainer>
         )}
       </Box>
 
       {/* Albums */}
       {loadingAlbums ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          minHeight={200}
-        >
-          <CircularProgress />
-        </Box>
+        <Loading />
       ) : albums.length > 0 ? (
         <>
           <Box sx={{ mb: 6 }}>
