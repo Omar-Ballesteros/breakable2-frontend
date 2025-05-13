@@ -10,6 +10,7 @@ import {
 
 interface Props {
   tracks: Track[];
+  showImage: boolean;
 }
 
 function millisToMinutes(millis: number) {
@@ -18,15 +19,15 @@ function millisToMinutes(millis: number) {
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 }
 
-const TrackTable: React.FC<Props> = ({ tracks }) => {
+const TrackTable: React.FC<Props> = ({ tracks, showImage }) => {
   return (
     <Table sx={{ minWidth: 650 }}>
       <TableHead>
         <TableRow>
           <TableCell>#</TableCell>
-          <TableCell>Image</TableCell>
+          {showImage && <TableCell>Image</TableCell>}
           <TableCell>Song Name</TableCell>
-          <TableCell>Popularity</TableCell>
+          <TableCell>Artist</TableCell>
           <TableCell>Song Length</TableCell>
         </TableRow>
       </TableHead>
@@ -34,15 +35,24 @@ const TrackTable: React.FC<Props> = ({ tracks }) => {
         {tracks.map((track, index) => (
           <TableRow key={track.id}>
             <TableCell sx={{ py: 0.5 }}>{index + 1}</TableCell>
-            <TableCell sx={{ py: 0.5 }}>
-              <img
-                src={track.album.images[0]?.url}
-                alt={track.name}
-                style={{ width: 50, height: 50 }}
-              />
-            </TableCell>
+            {showImage && (
+              <TableCell sx={{ py: 0.5 }}>
+                {track.album?.images?.[0]?.url && (
+                  <img
+                    src={track.album.images[0].url}
+                    alt={track.name}
+                    style={{ width: 50, height: 50 }}
+                  />
+                )}
+              </TableCell>
+            )}
             <TableCell sx={{ py: 0.5 }}>{track.name}</TableCell>
-            <TableCell sx={{ py: 0.5 }}>{track.popularity}</TableCell>
+            <TableCell sx={{ py: 0.5 }}>
+              {track.artists
+                .slice(0, 4)
+                .map((artist) => artist.name)
+                .join(", ")}
+            </TableCell>
             <TableCell sx={{ py: 0.5 }}>
               {millisToMinutes(track.duration_ms)}
             </TableCell>
