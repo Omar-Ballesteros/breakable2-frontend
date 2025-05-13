@@ -3,6 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import CallbackPage from "./pages/CallbackPage";
 import Dashboard from "./pages/Dashboard";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import ArtistDetail from "./pages/ArtistDetail";
 
 function App() {
   return (
@@ -14,6 +15,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/artist/:id"
+        element={
+          <ProtectedRoute>
+            <ArtistDetail />
           </ProtectedRoute>
         }
       />

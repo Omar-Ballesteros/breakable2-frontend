@@ -28,7 +28,6 @@ const CallbackPage = () => {
           }
         );
 
-        console.log("Auth response:", response.data);
         const { userId, accessToken, expiresIn } = response.data;
 
         if (userId && accessToken && expiresIn) {
