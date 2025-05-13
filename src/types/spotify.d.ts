@@ -5,6 +5,7 @@ export interface Artist {
   followers: { total: number };
   images: { url: string }[];
   type: string;
+  popularity: string;
 }
 
 export interface Album {
@@ -13,8 +14,11 @@ export interface Album {
   images: { url: string }[];
   release_date: string;
   genres: string[];
-  artists: { name: string }[];
+  artists: { name: string; id: string }[];
   type: string;
+  tracks: {
+    items: Track[];
+  };
 }
 
 export interface Track {
@@ -26,6 +30,8 @@ export interface Track {
   };
   artists: { name: string }[];
   type: string;
+  duration_ms: number;
+  popularity: number;
 }
 
 export interface SpotifyTopArtistResponse {
