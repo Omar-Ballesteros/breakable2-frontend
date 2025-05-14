@@ -83,7 +83,7 @@ const ArtistDetails = () => {
           <Loading />
         ) : (
           <TableContainer component={Paper} variant="outlined">
-            <TrackTable tracks={tracks} />
+            <TrackTable tracks={tracks} showImage={true} />
           </TableContainer>
         )}
       </Box>

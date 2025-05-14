@@ -4,6 +4,7 @@ import CallbackPage from "./pages/CallbackPage";
 import Dashboard from "./pages/Dashboard";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import ArtistDetail from "./pages/ArtistDetail";
+import AlbumDetail from "./pages/AlbumDetail";
 
 function App() {
   return (
@@ -23,6 +24,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ArtistDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/album/:id"
+        element={
+          <ProtectedRoute>
+            <AlbumDetail />
           </ProtectedRoute>
         }
       />
