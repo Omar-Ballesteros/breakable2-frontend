@@ -21,7 +21,16 @@ const LoginPage = () => {
           pt: 8,
         }}
       >
-        <Typography variant="h1" gutterBottom sx={{ whiteSpace: "nowrap" }}>
+        <Typography
+          variant="h1"
+          gutterBottom
+          sx={{
+            whiteSpace: "nowrap",
+            fontWeight: "bold",
+            color: "grey.900",
+            m: 6,
+          }}
+        >
           MY MUSIC APP
         </Typography>
         <LoginButton></LoginButton>
@@ -33,8 +42,8 @@ const LoginPage = () => {
           overflow: "hidden",
           display: "flex",
           justifyContent: "center",
-          height: "1024px",
-          m: 0,
+          flexGrow: 1,
+          position: "relative",
         }}
       >
         <Box
@@ -42,10 +51,12 @@ const LoginPage = () => {
           src="/Disco.png"
           alt="Disco de vinilo"
           sx={{
-            width: "1012px",
-            objectFit: "cover",
-            transform: "translateY(50%)",
-            marginBottom: 0,
+            width: "100%",
+            maxWidth: "1012px",
+            objectFit: "contain",
+            position: "absolute",
+            bottom: 0,
+            transform: "translateY(51%)",
           }}
         />
       </Box>
