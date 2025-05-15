@@ -1,58 +1,41 @@
-import { Button, Typography, Container, Box } from "@mui/material";
+import { Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import CallbackPage from "./pages/CallbackPage";
+import Dashboard from "./pages/Dashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import ArtistDetail from "./pages/ArtistDetail";
+import AlbumDetail from "./pages/AlbumDetail";
 
 function App() {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-        textAlign: "center",
-        paddingTop: 4,
-        overflow: "hidden",
-      }}
-    >
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          pt: 8,
-        }}
-      >
-        <Typography variant="h1" gutterBottom sx={{ whiteSpace: "nowrap" }}>
-          MY MUSIC APP
-        </Typography>
-        <Button variant="contained" sx={{ mt: 4 }}>
-          Login
-        </Button>
-      </Container>
-
-      <Box
-        sx={{
-          width: "100%",
-          overflow: "hidden",
-          display: "flex",
-          justifyContent: "center",
-          height: "1024px",
-          m: 0,
-        }}
-      >
-        <Box
-          component="img"
-          src="/Disco.png"
-          alt="Disco de vinilo"
-          sx={{
-            width: "1012px",
-            objectFit: "cover",
-            transform: "translateY(50%)",
-            marginBottom: 0,
-          }}
-        />
-      </Box>
-    </Box>
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/callback" element={<CallbackPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/artist/:id"
+        element={
+          <ProtectedRoute>
+            <ArtistDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/album/:id"
+        element={
+          <ProtectedRoute>
+            <AlbumDetail />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 
