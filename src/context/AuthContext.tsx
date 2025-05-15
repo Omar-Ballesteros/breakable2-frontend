@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessTokenExpiry, setAccessTokenExpiry] = useState<number | null>(
     null
   );
+  const API_BASE_URL = "http://backend:9090";
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     //token expirado
     try {
       const response = await axios.get(
-        `http://localhost:9090/api/access-token?userId=${userId}`
+        `${API_BASE_URL}/api/access-token?userId=${userId}`
       );
 
       const newToken = response.data.access_token;
