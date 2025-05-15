@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
 } from "react";
 
 interface AuthContextType {
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const login = (id: string, token: string, expiresIn: number) => {
+  const login = useCallback((id: string, token: string, expiresIn: number) => {
     const expiry = Date.now() + expiresIn * 1000;
     setUserId(id);
     setAccessToken(token);
@@ -45,16 +46,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("userId", id);
     localStorage.setItem("accessToken", token);
     localStorage.setItem("accessTokenExpiry", expiry.toString());
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUserId(null);
     setAccessToken(null);
     setAccessTokenExpiry(null);
     localStorage.removeItem("userId");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("accessTokenExpiry");
-  };
+  }, []);
 
   const getAccessToken = async (): Promise<string | null> => {
     if (!userId) return null;

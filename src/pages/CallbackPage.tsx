@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 import { CircularProgress, Container, Typography } from "@mui/material";
 
@@ -8,6 +8,7 @@ const CallbackPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const calledRef = useRef(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -17,6 +18,9 @@ const CallbackPage = () => {
       navigate("/");
       return;
     }
+
+    if (calledRef.current) return;
+    calledRef.current = true;
 
     const authenticate = async () => {
       try {
