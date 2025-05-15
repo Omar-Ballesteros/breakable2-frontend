@@ -25,7 +25,7 @@ const CallbackPage = () => {
     const authenticate = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:9090/api/auth/spotify",
+          `${import.meta.env.VITE_API_URL}/api/auth/spotify`,
           null,
           {
             params: { code },

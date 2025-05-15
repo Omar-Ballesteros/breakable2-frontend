@@ -19,7 +19,7 @@ export function useTopArtists() {
 
       try {
         const response = await axios.get<SpotifyTopArtistResponse>(
-          "http://localhost:9090/api/me/top/artists",
+          `${import.meta.env.VITE_API_URL}/api/me/top/artists`,
           {
             params: {
               userId,
@@ -46,7 +46,7 @@ export async function searchSpotify(
 ): Promise<Artist[] | Album[] | Track[]> {
   const userId = localStorage.getItem("userId");
   const response = await axios.get<SpotifySearchResponse>(
-    "http://localhost:9090/api/search",
+    `${import.meta.env.VITE_API_URL}/api/search`,
     {
       params: { query, type: type, userId },
       withCredentials: true,
@@ -69,7 +69,7 @@ export function useArtistDetails(artistId: string) {
 
       try {
         const response = await axios.get<Artist>(
-          `http://localhost:9090/api/artists/${artistId}`,
+          `${import.meta.env.VITE_API_URL}/api/artists/${artistId}`,
           {
             params: { userId },
             withCredentials: true,
@@ -100,7 +100,7 @@ export function useArtistTopTracks(artistId: string) {
 
       try {
         const response = await axios.get<{ tracks: Track[] }>(
-          `http://localhost:9090/api/artists/${artistId}/top-tracks`,
+          `${import.meta.env.VITE_API_URL}/api/artists/${artistId}/top-tracks`,
           {
             params: { userId },
             withCredentials: true,
@@ -131,7 +131,7 @@ export function useArtistAlbums(artistId: string) {
 
       try {
         const response = await axios.get<{ items: Album[] }>(
-          `http://localhost:9090/api/artists/${artistId}/albums`,
+          `${import.meta.env.VITE_API_URL}/api/artists/${artistId}/albums`,
           {
             params: { userId },
             withCredentials: true,
@@ -162,7 +162,7 @@ export function useAlbumDetails(albumId: string) {
 
       try {
         const response = await axios.get<Album>(
-          `http://localhost:9090/api/albums/${albumId}`,
+          `${import.meta.env.VITE_API_URL}/api/albums/${albumId}`,
           {
             params: { userId },
             withCredentials: true,

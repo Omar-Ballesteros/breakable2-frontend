@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 
 const LoginButton = () => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:9090/api/login";
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/login`;
   };
 
   return (
