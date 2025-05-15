@@ -7,6 +7,7 @@ import {
   SpotifyTopArtistResponse,
 } from "../types/spotify";
 import { useEffect, useState } from "react";
+const API_BASE_URL = "http://backend:9090";
 
 export function useTopArtists() {
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
@@ -19,7 +20,7 @@ export function useTopArtists() {
 
       try {
         const response = await axios.get<SpotifyTopArtistResponse>(
-          "http://localhost:9090/api/me/top/artists",
+          `${API_BASE_URL}/api/me/top/artists`,
           {
             params: {
               userId,
@@ -46,7 +47,7 @@ export async function searchSpotify(
 ): Promise<Artist[] | Album[] | Track[]> {
   const userId = localStorage.getItem("userId");
   const response = await axios.get<SpotifySearchResponse>(
-    "http://localhost:9090/api/search",
+    `${API_BASE_URL}/api/search`,
     {
       params: { query, type: type, userId },
       withCredentials: true,
@@ -69,7 +70,7 @@ export function useArtistDetails(artistId: string) {
 
       try {
         const response = await axios.get<Artist>(
-          `http://localhost:9090/api/artists/${artistId}`,
+          `${API_BASE_URL}/api/artists/${artistId}`,
           {
             params: { userId },
             withCredentials: true,
@@ -100,7 +101,7 @@ export function useArtistTopTracks(artistId: string) {
 
       try {
         const response = await axios.get<{ tracks: Track[] }>(
-          `http://localhost:9090/api/artists/${artistId}/top-tracks`,
+          `${API_BASE_URL}/api/artists/${artistId}/top-tracks`,
           {
             params: { userId },
             withCredentials: true,
@@ -131,7 +132,7 @@ export function useArtistAlbums(artistId: string) {
 
       try {
         const response = await axios.get<{ items: Album[] }>(
-          `http://localhost:9090/api/artists/${artistId}/albums`,
+          `${API_BASE_URL}/api/artists/${artistId}/albums`,
           {
             params: { userId },
             withCredentials: true,
@@ -162,7 +163,7 @@ export function useAlbumDetails(albumId: string) {
 
       try {
         const response = await axios.get<Album>(
-          `http://localhost:9090/api/albums/${albumId}`,
+          `${API_BASE_URL}/api/albums/${albumId}`,
           {
             params: { userId },
             withCredentials: true,
