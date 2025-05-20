@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessTokenExpiry, setAccessTokenExpiry] = useState<number | null>(
     null
   );
+  const API_BASE_URL = "http://backend:9090";
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
