@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     //token expirado
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/access-token?userId=${userId}`
+        `${import.meta.env.VITE_API_URL}/api/access-token?userId=${userId}`
       );
 
       const newToken = response.data.access_token;

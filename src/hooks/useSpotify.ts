@@ -7,7 +7,6 @@ import {
   SpotifyTopArtistResponse,
 } from "../types/spotify";
 import { useEffect, useState } from "react";
-const API_BASE_URL = "http://backend:9090";
 
 export function useTopArtists() {
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
@@ -20,7 +19,7 @@ export function useTopArtists() {
 
       try {
         const response = await axios.get<SpotifyTopArtistResponse>(
-          `${API_BASE_URL}/api/me/top/artists`,
+          `${import.meta.env.VITE_API_URL}/api/me/top/artists`,
           {
             params: {
               userId,
@@ -47,7 +46,7 @@ export async function searchSpotify(
 ): Promise<Artist[] | Album[] | Track[]> {
   const userId = localStorage.getItem("userId");
   const response = await axios.get<SpotifySearchResponse>(
-    `${API_BASE_URL}/api/search`,
+    `${import.meta.env.VITE_API_URL}/api/search`,
     {
       params: { query, type: type, userId },
       withCredentials: true,
@@ -70,7 +69,7 @@ export function useArtistDetails(artistId: string) {
 
       try {
         const response = await axios.get<Artist>(
-          `${API_BASE_URL}/api/artists/${artistId}`,
+          `${import.meta.env.VITE_API_URL}/api/artists/${artistId}`,
           {
             params: { userId },
             withCredentials: true,
@@ -101,7 +100,7 @@ export function useArtistTopTracks(artistId: string) {
 
       try {
         const response = await axios.get<{ tracks: Track[] }>(
-          `${API_BASE_URL}/api/artists/${artistId}/top-tracks`,
+          `${import.meta.env.VITE_API_URL}/api/artists/${artistId}/top-tracks`,
           {
             params: { userId },
             withCredentials: true,
@@ -132,7 +131,7 @@ export function useArtistAlbums(artistId: string) {
 
       try {
         const response = await axios.get<{ items: Album[] }>(
-          `${API_BASE_URL}/api/artists/${artistId}/albums`,
+          `${import.meta.env.VITE_API_URL}/api/artists/${artistId}/albums`,
           {
             params: { userId },
             withCredentials: true,
@@ -163,7 +162,7 @@ export function useAlbumDetails(albumId: string) {
 
       try {
         const response = await axios.get<Album>(
-          `${API_BASE_URL}/api/albums/${albumId}`,
+          `${import.meta.env.VITE_API_URL}/api/albums/${albumId}`,
           {
             params: { userId },
             withCredentials: true,

@@ -4,7 +4,7 @@ import { Box, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import BackButton from "../components/BackButton";
-import TrackTable from "../components/trackTable";
+import TrackTable from "../components/TrackTable";
 
 const AlbumDetails = () => {
   const { id } = useParams();

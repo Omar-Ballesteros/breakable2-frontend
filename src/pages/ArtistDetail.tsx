@@ -6,7 +6,7 @@ import {
 } from "../hooks/useSpotify";
 import { Box, Typography, Chip, TableContainer, Paper } from "@mui/material";
 import AlbumsGrid from "../components/AlbumGrid";
-import TrackTable from "../components/trackTable";
+import TrackTable from "../components/TrackTable";
 import BackButton from "../components/BackButton";
 import Loading from "../components/Loading";
 

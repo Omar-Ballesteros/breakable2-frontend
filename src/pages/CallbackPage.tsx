@@ -9,7 +9,6 @@ const CallbackPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const calledRef = useRef(false);
-  const API_BASE_URL = "http://backend:9090";
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -26,7 +25,7 @@ const CallbackPage = () => {
     const authenticate = async () => {
       try {
         const response = await axios.post(
-          `${API_BASE_URL}/api/auth/spotify`,
+          `${import.meta.env.VITE_API_URL}/api/auth/spotify`,
           null,
           {
             params: { code },
